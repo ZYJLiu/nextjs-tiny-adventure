@@ -13,7 +13,11 @@ import { PublicKey, Transaction } from "@solana/web3.js"
 import { useWallet, useConnection } from "@solana/wallet-adapter-react"
 // import { useAnchor } from "@/contexts/AnchorContextProvider"
 import WalletMultiButton from "@/components/WalletMultiButton"
-import { program, globalLevel1GameDataAccount } from "@/utils/anchor"
+import {
+  program,
+  connection,
+  globalLevel1GameDataAccount,
+} from "@/utils/anchor"
 
 type GameDataAccount = {
   playerPosition: number
@@ -21,7 +25,7 @@ type GameDataAccount = {
 
 export default function Home() {
   const { publicKey, sendTransaction } = useWallet()
-  const { connection } = useConnection()
+  // const { connection } = useConnection()
   // const { program } = useAnchor()
 
   const [loadingInitialize, setLoadingInitialize] = useState(false)
@@ -116,7 +120,7 @@ export default function Home() {
       const txSig = await sendTransaction(tx, connection)
 
       const { blockhash, lastValidBlockHeight } =
-        await connection.getLatestBlockhash()
+        await connection.getLatestBlockhash({ commitment: "confirmed" })
 
       await connection.confirmTransaction(
         {
