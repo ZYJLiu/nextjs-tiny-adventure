@@ -10,7 +10,7 @@ import { clusterApiUrl, Connection, Keypair, PublicKey } from "@solana/web3.js"
 
 // Create a connection to the devnet cluster
 export const connection = new Connection(
-  "https://rpc-devnet.helius.xyz/?api-key=7e7a0916-7d4e-43e9-9b0e-b48483ffc08c"
+  "https://rpc-devnet.helius.xyz/?api-key=7e7a0916-7d4e-43e9-9b0e-b48483ffc08c", {commitment: "confirmed"}
 )
 
 // Create a placeholder wallet to set up AnchorProvider
