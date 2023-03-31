@@ -10,8 +10,7 @@ import {
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { PublicKey, Transaction } from "@solana/web3.js"
-import { useWallet, useConnection } from "@solana/wallet-adapter-react"
-// import { useAnchor } from "@/contexts/AnchorContextProvider"
+import { useWallet } from "@solana/wallet-adapter-react"
 import WalletMultiButton from "@/components/WalletMultiButton"
 import {
   program,
@@ -25,8 +24,6 @@ type GameDataAccount = {
 
 export default function Home() {
   const { publicKey, sendTransaction } = useWallet()
-  // const { connection } = useConnection()
-  // const { program } = useAnchor()
 
   const [loadingInitialize, setLoadingInitialize] = useState(false)
   const [loadingRight, setLoadingRight] = useState(false)
@@ -122,13 +119,14 @@ export default function Home() {
       const { blockhash, lastValidBlockHeight } =
         await connection.getLatestBlockhash()
 
-      await connection.confirmTransaction({
-        blockhash,
-        lastValidBlockHeight,
-        signature: txSig,
-      })
+      await connection.confirmTransaction(
+        {
+          blockhash,
+          lastValidBlockHeight,
+          signature: txSig,
+        }
+      )
 
-      // await fetchData(globalLevel1GameDataAccount)
       setLoading(false)
     } catch (error) {
       console.error("Error processing transaction:", error)
@@ -163,9 +161,10 @@ export default function Home() {
 
     const subscriptionId = connection.onAccountChange(
       globalLevel1GameDataAccount,
-      (accountInfo) => {
-        console.log("AccountInfo", accountInfo)
-        fetchData(globalLevel1GameDataAccount)
+      (accountInfo) => {        
+        const decoded = program.coder.accounts.decode("gameDataAccount", accountInfo.data);
+        console.log("New player position via socket", decoded.playerPosition);
+        setGameDataAccount(decoded);
       }
     )
 
