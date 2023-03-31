@@ -120,17 +120,13 @@ export default function Home() {
       const txSig = await sendTransaction(tx, connection)
 
       const { blockhash, lastValidBlockHeight } =
-        await connection.getLatestBlockhash({ commitment: "confirmed" })
+        await connection.getLatestBlockhash()
 
-      await connection.confirmTransaction(
-        {
-          blockhash,
-          lastValidBlockHeight,
-          signature: txSig,
-        },
-        "confirmed"
-        // "finalized"
-      )
+      await connection.confirmTransaction({
+        blockhash,
+        lastValidBlockHeight,
+        signature: txSig,
+      })
 
       // await fetchData(globalLevel1GameDataAccount)
       setLoading(false)
@@ -162,7 +158,6 @@ export default function Home() {
     })
   }
 
-  // "confirmed" does not fetch updated state
   useEffect(() => {
     if (!globalLevel1GameDataAccount) return
 
@@ -171,9 +166,7 @@ export default function Home() {
       (accountInfo) => {
         console.log("AccountInfo", accountInfo)
         fetchData(globalLevel1GameDataAccount)
-      },
-      "confirmed"
-      // "finalized"
+      }
     )
 
     return () => {
