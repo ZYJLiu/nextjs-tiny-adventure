@@ -124,8 +124,8 @@ export default function Home() {
           lastValidBlockHeight,
           signature: txSig,
         },
-        // "confirmed"
-        "finalized"
+        "confirmed"
+        // "finalized"
       )
 
       // await fetchData(globalLevel1GameDataAccount)
@@ -168,8 +168,8 @@ export default function Home() {
         console.log("AccountInfo", accountInfo)
         fetchData(globalLevel1GameDataAccount)
       },
-      // "confirmed"
-      "finalized"
+      "confirmed"
+      // "finalized"
     )
 
     return () => {
