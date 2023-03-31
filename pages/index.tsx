@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react"
 import { useEffect, useState } from "react"
 import { PublicKey, Transaction } from "@solana/web3.js"
-import { useWallet, useConnection } from "@solana/wallet-adapter-react"
+import { useWallet } from "@solana/wallet-adapter-react"
 import WalletMultiButton from "@/components/WalletMultiButton"
 import {
   program,
