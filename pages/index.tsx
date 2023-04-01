@@ -71,37 +71,79 @@ export default function Home() {
   }
 
   async function handleClickInitialize() {
-    const transaction = program.methods
-      .initialize()
-      .accounts({
-        newGameDataAccount: globalLevel1GameDataAccount,
-        signer: publicKey!,
-      })
-      .transaction()
+    if (publicKey) {
+      const transaction = program.methods
+        .initialize()
+        .accounts({
+          newGameDataAccount: globalLevel1GameDataAccount,
+          signer: publicKey,
+        })
+        .transaction()
 
-    await sendAndConfirmTransaction(() => transaction, setLoadingInitialize)
+      await sendAndConfirmTransaction(() => transaction, setLoadingInitialize)
+    } else {
+      try {
+        const response = await fetch("/api/sendTransaction", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ instruction: "initialize" }),
+        })
+        const data = await response.json()
+        console.log(data)
+      } catch (error) {
+        console.error(error)
+      }
+    }
   }
 
   async function handleClickRight() {
-    const transaction = program.methods
-      .moveRight()
-      .accounts({
-        gameDataAccount: globalLevel1GameDataAccount,
-      })
-      .transaction()
+    if (publicKey) {
+      const transaction = program.methods
+        .moveRight()
+        .accounts({
+          gameDataAccount: globalLevel1GameDataAccount,
+        })
+        .transaction()
 
-    await sendAndConfirmTransaction(() => transaction, setLoadingRight)
+      await sendAndConfirmTransaction(() => transaction, setLoadingRight)
+    } else {
+      try {
+        const response = await fetch("/api/sendTransaction", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ instruction: "moveRight" }),
+        })
+        const data = await response.json()
+        console.log(data)
+      } catch (error) {
+        console.error(error)
+      }
+    }
   }
 
   async function handleClickLeft() {
-    const transaction = program.methods
-      .moveLeft()
-      .accounts({
-        gameDataAccount: globalLevel1GameDataAccount,
-      })
-      .transaction()
+    if (publicKey) {
+      const transaction = program.methods
+        .moveLeft()
+        .accounts({
+          gameDataAccount: globalLevel1GameDataAccount,
+        })
+        .transaction()
 
-    await sendAndConfirmTransaction(() => transaction, setLoadingLeft)
+      await sendAndConfirmTransaction(() => transaction, setLoadingLeft)
+    } else {
+      try {
+        const response = await fetch("/api/sendTransaction", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ instruction: "moveLeft" }),
+        })
+        const data = await response.json()
+        console.log(data)
+      } catch (error) {
+        console.error(error)
+      }
+    }
   }
 
   async function sendAndConfirmTransaction(
