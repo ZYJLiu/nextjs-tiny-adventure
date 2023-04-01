@@ -119,13 +119,11 @@ export default function Home() {
       const { blockhash, lastValidBlockHeight } =
         await connection.getLatestBlockhash()
 
-      await connection.confirmTransaction(
-        {
-          blockhash,
-          lastValidBlockHeight,
-          signature: txSig,
-        }
-      )
+      await connection.confirmTransaction({
+        blockhash,
+        lastValidBlockHeight,
+        signature: txSig,
+      })
 
       setLoading(false)
     } catch (error) {
@@ -161,10 +159,13 @@ export default function Home() {
 
     const subscriptionId = connection.onAccountChange(
       globalLevel1GameDataAccount,
-      (accountInfo) => {        
-        const decoded = program.coder.accounts.decode("gameDataAccount", accountInfo.data);
-        console.log("New player position via socket", decoded.playerPosition);
-        setGameDataAccount(decoded);
+      (accountInfo) => {
+        const decoded = program.coder.accounts.decode(
+          "gameDataAccount",
+          accountInfo.data
+        )
+        console.log("New player position via socket", decoded.playerPosition)
+        setGameDataAccount(decoded)
       }
     )
 
