@@ -25,7 +25,6 @@ export default async function handler(
 
   let transaction: Transaction
 
-  // Create and assign the transaction based on the instruction
   switch (instruction) {
     case "initialize":
       transaction = await program.methods

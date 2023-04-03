@@ -66,6 +66,10 @@ export default function Home() {
     }
   }, [gameDataAccount])
 
+  useEffect(() => {
+    fetchData(globalLevel1GameDataAccount)
+  }, [])
+
   async function handleClickGetData() {
     fetchData(globalLevel1GameDataAccount)
   }
@@ -138,6 +142,7 @@ export default function Home() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ instruction: "moveLeft" }),
         })
+        setLoadingLeft(false)
         const data = await response.json()
         console.log(data)
       } catch (error) {
@@ -174,26 +179,16 @@ export default function Home() {
     }
   }
 
-  const fetchData = (pda: PublicKey, isInitialCall = false) => {
+  const fetchData = async (pda: PublicKey) => {
     console.log("Fetching GameDataAccount state...")
-    return new Promise<void>((resolve, reject) => {
-      program.account.gameDataAccount
-        .fetch(pda)
-        .then((account) => {
-          console.log(account)
-          setGameDataAccount(account)
 
-          resolve()
-        })
-        .catch((error) => {
-          console.log(`Error fetching GameDataAccount state: ${error}`)
-          if (isInitialCall) {
-            reject()
-          } else {
-            setTimeout(() => fetchData(pda), 1000) // Retry after 1 second
-          }
-        })
-    })
+    try {
+      const account = await program.account.gameDataAccount.fetch(pda)
+      console.log(JSON.stringify(account, null, 2))
+      setGameDataAccount(account)
+    } catch (error) {
+      console.log(`Error fetching GameDataAccount state: ${error}`)
+    }
   }
 
   useEffect(() => {
